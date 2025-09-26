@@ -34,5 +34,18 @@ def view(form_id):
     return render_template("view.html", form=form)
 
 
+@app.route("/edit/<int:form_id>", methods=["GET", "POST"])
+def edit(form_id):
+    form = next((f for f in forms if f["id"] == form_id), None)
+    if not form:
+        return "Not found", 404
+    if request.method == "POST":
+        form["name"] = request.form.get("name")
+        form["email"] = request.form.get("email")
+        form["category"] = request.form.get("category")
+        return redirect(url_for("index"))
+    return render_template("edit.html", form=form)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
