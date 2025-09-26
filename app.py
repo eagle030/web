@@ -28,5 +28,11 @@ def create():
     return render_template("create.html")
 
 
+@app.route("/view/<int:form_id>")
+def view(form_id):
+    form = next((f for f in forms if f["id"] == form_id), None)
+    return render_template("view.html", form=form)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
