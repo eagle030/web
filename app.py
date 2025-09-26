@@ -47,5 +47,12 @@ def edit(form_id):
     return render_template("edit.html", form=form)
 
 
+@app.route("/delete/<int:form_id>")
+def delete(form_id):
+    global forms
+    forms = [f for f in forms if f["id"] != form_id]
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
