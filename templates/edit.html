@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать форму</title>
+</head>
+<body>
+    <h1>Редактировать форму</h1>
+    <form method="post">
+        Имя: <input type="text" name="name" value="{{ form.name }}" required><br>
+        Email: <input type="email" name="email" value="{{ form.email }}" required><br>
+        Категория:
+        <select name="category">
+            <option value="A" {% if form.category == "A" %}selected{% endif %}>Категория A</option>
+            <option value="B" {% if form.category == "B" %}selected{% endif %}>Категория B</option>
+            <option value="C" {% if form.category == "C" %}selected{% endif %}>Категория C</option>
+        </select><br>
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{{ url_for('index') }}">Назад</a>
+</body>
+</html>

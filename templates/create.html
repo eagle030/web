@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать форму</title>
+</head>
+<body>
+    <h1>Создать форму</h1>
+    <form method="post">
+        Имя: <input type="text" name="name" required><br>
+        Email: <input type="email" name="email" required><br>
+        Категория:
+        <select name="category">
+            <option value="A">Категория A</option>
+            <option value="B">Категория B</option>
+            <option value="C">Категория C</option>
+        </select><br>
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{{ url_for('index') }}">Назад</a>
+</body>
+</html>

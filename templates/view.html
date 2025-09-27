@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр формы</title>
+</head>
+<body>
+    <h1>Форма #{{ form.id }}</h1>
+    <p>Имя: {{ form.name }}</p>
+    <p>Email: {{ form.email }}</p>
+    <p>Категория: {{ form.category }}</p>
+    <a href="{{ url_for('index') }}">Назад</a>
+</body>
+</html>

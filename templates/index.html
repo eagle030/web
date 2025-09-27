@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список форм</title>
+</head>
+<body>
+    <h1>Список форм</h1>
+    <a href="{{ url_for('create') }}">Создать новую форму</a>
+    <ul>
+        {% for form in forms %}
+            <li>
+                {{ form.name }} ({{ form.email }}) — {{ form.category }}
+                [<a href="{{ url_for('view', form_id=form.id) }}">Просмотр</a>]
+                [<a href="{{ url_for('edit', form_id=form.id) }}">Редактировать</a>]
+                [<a href="{{ url_for('delete', form_id=form.id) }}">Удалить</a>]
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
