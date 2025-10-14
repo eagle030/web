@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Клонируем репозиторий..."
-                git branch: 'main', url: 'https://github.com/eagle030/web'
+                git branch: 'master', url: 'https://github.com/eagle030/web'
             }
         }
 
