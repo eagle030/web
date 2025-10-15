@@ -7,7 +7,7 @@
     - name: Copy Docker image tar to remote server
       copy:
         src: "{{ docker_image_tar }}"
-        dest: "/tmp/{{ docker_image_tar }}"
+        dest: "/home/vboxuser/mytmp/{{ docker_image_tar }}"
 
     - name: Load Docker image on remote server
       shell: docker load -i /tmp/{{ docker_image_tar }}
@@ -23,5 +23,5 @@
 
     - name: Remove temporary tar file
       file:
-        path: "/tmp/{{ docker_image_tar }}"
+        path: "/home/vboxuser/mytmp/{{ docker_image_tar }}"
         state: absent
