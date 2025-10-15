@@ -4,13 +4,19 @@
     docker_image_tar: "myapp.tar"
 
   tasks:
+    - name: Clean old Docker containers and tmp
+      shell: |
+        docker system prune -af
+        rm -rf /home/vboxuser/mytmp/*
+        rm -rf /home/vboxuser/.ansible/tmp/*
+
     - name: Copy Docker image tar to remote server
       copy:
         src: "{{ docker_image_tar }}"
         dest: "/home/vboxuser/mytmp/{{ docker_image_tar }}"
 
     - name: Load Docker image on remote server
-      shell: docker load -i /tmp/{{ docker_image_tar }}
+      shell: docker load -i /home/vboxuser/mytmp/{{ docker_image_tar }}
 
     - name: Stop old container if exists
       shell: docker stop myapp || true
@@ -19,7 +25,7 @@
       shell: docker rm myapp || true
 
     - name: Run new container
-      shell: docker run -d --name myapp -p 5000:5000 myapp
+      shell: docker run -d --name myapp -p 5995:5995 myapp
 
     - name: Remove temporary tar file
       file:
