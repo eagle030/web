@@ -1,72 +1,27 @@
-- name: Deploy Flask app with templates
-  hosts: vm2
-  become: true
-
+- hosts: all
+  become: yes
   vars:
-    app_dir: /opt/flask_app
-    venv_dir: /opt/flask_app/venv
-    app_user: flask
+    docker_image_tar: "myapp.tar"
 
   tasks:
-
-    # 1. Установка Python, pip и venv
-    - name: Ensure Python3, pip and venv are installed
-      apt:
-        name:
-          - python3
-          - python3-venv
-          - python3-pip
-        state: present
-        update_cache: yes
-
-    # 2. Создание пользователя приложения
-    - name: Create application user
-      user:
-        name: "{{ app_user }}"
-        system: yes
-        create_home: no
-
-    # 3. Копирование приложения
-    - name: Create application directory
-      file:
-        path: "{{ app_dir }}"
-        state: directory
-        owner: "{{ app_user }}"
-        group: "{{ app_user }}"
-        mode: 0755
-
-    - name: Copy application files with templates
+    - name: Copy Docker image tar to remote server
       copy:
-        src: files/app/
-        dest: "{{ app_dir }}"
-        owner: "{{ app_user }}"
-        group: "{{ app_user }}"
-        mode: 0755
+        src: "{{ docker_image_tar }}"
+        dest: "/tmp/{{ docker_image_tar }}"
 
-    # 4. Создание виртуального окружения и установка зависимостей
-    - name: Create Python virtual environment
-      command: python3 -m venv "{{ venv_dir }}"
-      args:
-        creates: "{{ venv_dir }}/bin/activate"
+    - name: Load Docker image on remote server
+      shell: docker load -i /tmp/{{ docker_image_tar }}
 
-    - name: Install Python dependencies
-      pip:
-        requirements: "{{ app_dir }}/requirements.txt"
-        virtualenv: "{{ venv_dir }}"
+    - name: Stop old container if exists
+      shell: docker stop myapp || true
 
-    # 5. Настройка systemd-сервиса для Flask
-    - name: Deploy Flask systemd service
-      template:
-        src: flask_app.service.j2
-        dest: /etc/systemd/system/flask_app.service
-        mode: 0644
+    - name: Remove old container if exists
+      shell: docker rm myapp || true
 
-    - name: Reload systemd
-      systemd:
-        daemon_reload: yes
+    - name: Run new container
+      shell: docker run -d --name myapp -p 5000:5000 myapp
 
-    - name: Enable and start Flask service
-      systemd:
-        name: flask_app
-        state: started
-        enabled: yes
+    - name: Remove temporary tar file
+      file:
+        path: "/tmp/{{ docker_image_tar }}"
+        state: absent
